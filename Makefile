@@ -1,0 +1,10 @@
+CC=gcc
+EXECUTABLE=hw1
+LEX=flex
+LEXER=hw1.l
+LEXER_OUT=lex.yy.c
+GCC_OPTION=-o
+
+all:
+	$(LEX) $(LEXER)
+	$(CC) $(LEXER_OUT) $(GCC_OPTION) $(EXECUTABLE)
