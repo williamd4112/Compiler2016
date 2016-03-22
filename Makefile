@@ -1,10 +1,12 @@
 CC=gcc
 EXECUTABLE=hw1
+SRC=hashtable.c lex.yy.c
+INC=hashtable.h
 LEX=flex
 LEXER=hw1.l
-LEXER_OUT=lex.yy.c
 GCC_OPTION=-o
 
 all:
 	$(LEX) $(LEXER)
-	$(CC) $(LEXER_OUT) $(GCC_OPTION) $(EXECUTABLE)
+	$(CC) $(SRC) $(GCC_OPTION) $(EXECUTABLE) -L$(INC)
+	./$(EXECUTABLE) < simple.c
