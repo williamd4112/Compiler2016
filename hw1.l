@@ -12,6 +12,7 @@ Letter [A-Za-z]
 #define PrintVariable() printf("#%d\tVariableID: %s\n",yylineno + 1, yytext)
 #define PrintFunction() printf("#%d\tFunctionID: %s\n",yylineno + 1, yytext)
 #define PrintLiteral() printf("#%d\tLiteral: %s\n",yylineno + 1, yytext)
+#define PrintLabel() printf("#%d\tLabel: %s\n",yylieno + 1, yytext)
 #define PrintIdentifier() printf("#%d\tIdentifier: %s\n",yylineno + 1, yytext);
 #define PrintKeyword() printf("#%d\tKeyword: %s\n",yylineno + 1, yytext)
 #define PrintPreprocessorSymbol() printf("#%d\tPreprocessor: %s\n",yylineno + 1, yytext)
@@ -21,7 +22,9 @@ Letter [A-Za-z]
 %}
 
 %x COMMENT
-%x VARIABLE
+%s VARIABLE
+%s STRUCT
+%x COMMA
 %%
 
 <*>\n 		{
@@ -34,17 +37,23 @@ Letter [A-Za-z]
 "//[.]*"	{
 			PrintComment();
 		}
-[\(\[\{]	{
+[\(\{]		{
 			PrintKeyword();
 		}
-[\)\]\}]	{
+[\)\}]		{
 			PrintKeyword();
+		}
+"["		{
+			PrintOperator();
+		}
+"]"		{
+			PrintOperator();
 		}
 "<:"		{
-			PrintKeyword();
+			PrintOperator();
 		}
 ":>"		{
-			PrintKeyword();
+			PrintOperator();
 		}
 "++"		{
 			PrintOperator();
@@ -79,10 +88,10 @@ Letter [A-Za-z]
 "/"		{
 			PrintOperator();
 		}
-"%"		{
+"%="		{
 			PrintOperator();
 		}
-"%="		{
+"%"		{
 			PrintOperator();
 		}
 "<<="		{
@@ -175,34 +184,35 @@ Letter [A-Za-z]
 		}
 "short" 	{
 			PrintDataType();
-			//BEGIN(VARIABLE);
+			BEGIN(VARIABLE);
 		}
 "int" 		{
 			PrintDataType();
-			//BEGIN(VARIABLE);
+			BEGIN(VARIABLE);
 		}
 "long" 		{
 			PrintDataType();
-			//BEGIN(VARIABLE);
+			BEGIN(VARIABLE);
 		}
 "float"		{
 			PrintDataType();
-			//BEGIN(VARIABLE);
+			BEGIN(VARIABLE);
 		}
 "double"	{
 			PrintDataType();
-			//BEGIN(VARIABLE);
+			BEGIN(VARIABLE);
 		}
 "char"		{
 			PrintDataType();
-			//BEGIN(VARIABLE);
+			BEGIN(VARIABLE);
 		}
 "void" 		{
 			PrintDataType();
-			//BEGIN(VARIABLE);
+			BEGIN(VARIABLE);
 		}
 "struct"	{
 			PrintDataType();
+			BEGIN(STRUCT);
 		}
 "union"		{
 			PrintDataType();
@@ -252,6 +262,9 @@ Letter [A-Za-z]
 "return"	{
 			PrintKeyword();
 		}
+<STRUCT>[a-zA-Z_][a-zA-Z0-0_]*  {
+					
+				}
 [a-zA-Z_][a-zA-Z0-9_]*		{
 					PrintIdentifier();
 				}
