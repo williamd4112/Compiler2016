@@ -36,6 +36,8 @@ int find(hashtable *dst, const char *s, size_t len, int type);
 */
 void insert(hashtable *dst, const char *s, size_t len);
 
+void clear(hashtable *dst);
+
 int init_hashtable(hashtable *table_src);
 
 #endif

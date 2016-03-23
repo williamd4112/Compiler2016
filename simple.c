@@ -1,43 +1,26 @@
 
-struct node_t;
+static volatile const unsigned int N = 1e9;
 
-struct leaf_t 
-{
-	int id;
-	char *name;
-} leaf;
+register int M = 3.0e9;
 
-struct 
-{
+int add(const int *a, const int b);
 
-} noname_struct;
-
-enum mode {LEAF, ROOT, INNER};
-enum level_t {HARD, NORMAL, EASY} level;
-enum {KERKER} kk;
-
-union reocrd_t
-{
-	unsigned int num;
-	signed char *text;
-};
-
-union 
-{
-	int a;
-	int b;
-} uu;
-
-
-int
+int 
 main 
 (int argc, char *argv[])
 {
-	int m = mode;
+	int 
+	********a = &argc;
+	
+	unsigned int c = N;
 
-	uu.a = 0;
-	uu.b = 1;
+	printf("Fuck you Tayler %d !\n\'\"", argc);	
+	
+	int i;
+	for(i = 0; i < 10; i++)
+	{
+		puts("Pupupupu");
+	}	
 
 	return 0;
-}
-
+} 

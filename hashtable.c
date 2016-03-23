@@ -11,9 +11,9 @@
 int hash(const char *s, size_t len)
 {
 	unsigned long hash = 5381;
-	int c;
+	int c, i;
 	
-	for(int i = 0; i < len; i++)
+	for(i = 0; i < len; i++)
 	{
 		c = s[i];
 		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
@@ -64,6 +64,24 @@ void insert(hashtable *dst, const char *s, size_t len)
 		dst->count++;
 	}
 
+}
+
+void delete_node(node *nd)
+{
+	if(nd->next != NULL)
+		delete_node(nd->next);
+	free(nd);
+}
+
+void clear(hashtable *dst)
+{
+	int i;
+	for(i = 0; i < NUM_SLOTS; i++)
+	{
+		if(dst->slots[i])
+			delete_node(dst->slots[i]);
+		dst->slots[i] = NULL;
+	}
 }
 
 int init_hashtable(hashtable *src)
