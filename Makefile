@@ -9,4 +9,4 @@ GCC_OPTION=-o
 all:
 	$(LEX) $(LEXER)
 	$(CC) $(SRC) $(GCC_OPTION) $(EXECUTABLE) -L$(INC)
-	./$(EXECUTABLE) < simple.c
+	./$(EXECUTABLE) < testcase/testcase3.c

@@ -7,11 +7,6 @@ struct leaf_t
 	char *name;
 } leaf;
 
-struct 
-{
-
-} noname_struct;
-
 enum mode {LEAF, ROOT, INNER};
 enum level_t {HARD, NORMAL, EASY} level;
 enum {KERKER} kk;
