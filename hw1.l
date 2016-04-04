@@ -1,6 +1,15 @@
 /*
 	Implementation:
 		. Low Level explanation
+			. Preprocessor
+				. include
+				. define
+				. undef
+				. ifdef
+				. ifndef
+				. else
+				. error
+				. pragma
 			. Keyword
 				. Branch
 					. if
@@ -8,7 +17,7 @@
 					. switch
 					. goto
 					. break
-					. clear_hashtable
+					. case
 					. default
 					. continue
 					. return
