@@ -38,4 +38,8 @@ void insert(hashtable *dst, const char *s, size_t len);
 
 int init_hashtable(hashtable *table_src);
 
+void clear_hashtable(hashtable *table_src);
+
+void clear_node(node *);
+
 #endif

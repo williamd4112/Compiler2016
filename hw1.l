@@ -1,15 +1,160 @@
+/*
+	Implementation:
+		. Low Level explanation
+			. Keyword
+				. Branch
+					. if
+					. else
+					. switch
+					. goto
+					. break
+					. clear_hashtable
+					. default
+					. continue
+					. return
+				. Loop
+					. for
+					. while
+					. do
+				. Typedef
+					. typedef
+					. struct
+					. enum
+					. union
+					. auto
+				. Sizeof
+					. sizeof
+				. Modifier
+					. signed
+					. unsigned
+					. static
+					. const
+					. volatile
+					. register
+				. Type
+					. void
+					. char
+					. short
+					. int
+					. long
+					. float
+					. double
+			. Operator
+				. +
+				. ++
+				. +=
+				. -
+				. --
+				. -=
+				. *
+				. *=
+				. /
+				. /=
+				. <<
+				. <<=
+				. >>
+				. >>=
+				. &
+				. &&
+				. &=
+				. |
+				. ||
+				. |=
+				. ~
+				. ~=
+				. =
+				. !=
+				. ==
+		. High Level explanation
+			. Function
+				. e.g.
+					.	int main(int argc){}
+						. int - Datatype
+						. main - function name
+						. int - Datatype
+						. argc - variable::local::argc
+			. Pointer
+				. int *ptr;
+					. int - Datatype
+					. * - Operator
+					. ptr - Variable Name
+			. Simple Statement
+			. Array
+				. char *argv[]
+					. char - Datatype
+					. * - Operator
+					. argv - variable
+					. [ - Keyword
+					. ] - Keyword
+			. Variable Scope
+				static int N = 100;
+				int main()
+				{
+					int a = N;
+				}
+					. int - Datatype
+					. a - variable::local::a
+					. = - Operator
+					. N - Identifier::global::N
+
+*/
+
+
 %{
 #include <string.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include "hashtable.h"
+#define NUM_SLOTS 4096
+
+typedef struct node_t
+{
+	char *value;
+	struct node_t *next;
+} node;
+
+typedef struct hashtable_t
+{
+	int count;
+	node *slots[NUM_SLOTS];
+
+} hashtable;
+
+/*
+	Generate hash key
+
+	return hash key
+*/
+int hash(const char *s, size_t len);
+
+/*
+	Return 1 if found
+	type: 
+		0: no insert when fail
+		1: insert when fail	
+*/
+int find(hashtable *dst, const char *s, size_t len, int type);
+
+/*
+	
+*/
+void insert(hashtable *dst, const char *s, size_t len);
+
+int init_hashtable(hashtable *table_src);
+
+void clear_hashtable(hashtable *table_src);
+
+void clear_node(node *);
 
 #define STACK_SIZE 1024
 
-enum scope_mode_t
-{
-	GLOBAL, LOCAL
-};
+typedef enum scope_mode_t
+{	
+	GLOBAL = 0, 
+	LOCAL = 1, 
+	UNRESOLVED = 2,
+} scope_mode_t;
 
 typedef struct scope_t
 {
@@ -22,9 +167,6 @@ static int process_comment();
 static int process_operator();
 static int process_modifier();
 static int process_datatype();
-static int process_struct();
-static int process_enum();
-static int process_union();
 static int process_constant();
 static int process_literal();
 static int process_function();
@@ -34,7 +176,20 @@ static int process_macro();
 int yywrap(void);
 static void skip_comment(void);
 
+const char *scope_str[3] = {
+	"_global",
+	"_local",
+	"_unresolved"
+};
+
 scope *scope_stack[STACK_SIZE];
+
+static int scope_stack_index = -1;
+static void push_scope(scope_mode_t);
+static void pop_scope();
+static scope_mode_t find_symbol(const char *);
+static void put_symbol(const char *);
+static scope_mode_t get_current_scope();
 
 %}
 
@@ -52,9 +207,18 @@ skip                    ([\t\f\v\n\r ])
 %x COMMENT
 %s MACRO
 %s DATATYPE
+%s DATATYPE_ASSIGN
+%s FUNCTION_DECLARATION
+%s ENUM_DECLARATION
+%s ENUM
+%s STRUCT_DECLARATION
+%s STRUCT
+%s UNION_DECLARATION
+%s UNION
+
 %%
 
-"\n"				{ ++yylineno; BEGIN(INITIAL); }
+"\n"				{ ++yylineno; if(YY_START == MACRO) BEGIN(INITIAL); }
 [\t\f\v\r ]+		{}
 
 "/*".*				{ process_comment(); BEGIN(COMMENT); }
@@ -64,27 +228,64 @@ skip                    ([\t\f\v\n\r ])
 "//".*				{ process_comment();  }
 
 "#"					{ process_keyword(); BEGIN(MACRO); }
-<MACRO>"include"	{ process_macro();  }
-<MACRO>"<".*">" 	{ process_literal();}
-<MACRO>"define" 	{ process_macro();  }
-<MACRO>"ifdef"		{ process_macro();  }
-<MACRO>"ifndef"		{ process_macro();  }
-<MACRO>"else"		{ process_macro();  }
-<MACRO>"endif"		{ process_macro();  }
-<MACRO>"error"		{ process_macro();  }
-<MACRO>"pragma"		{ process_macro();  }
+<MACRO>
+{
+	"include"/({skip}*\(.*\)|"")	{ process_macro();  }
+	"<".*">"						{ process_literal();}
+	"define"/({skip}*\(.*\)|"") 	{ process_macro();  }
+	"undef"/({skip}*\(.*\)|"") 		{ process_macro();  }
+	"ifdef"/({skip}*\(.*\)|"")		{ process_macro();  }
+	"ifndef"/({skip}*\(.*\)|"")		{ process_macro();  }
+	"else"/({skip}*\(.*\)|"")		{ process_macro();  }
+	"endif"/({skip}*\(.*\)|"")		{ process_macro();  }
+	"error"/({skip}*\(.*\)|"")		{ process_macro();  }
+	"pragma"/({skip}*\(.*\)|"") 	{ process_macro();  }
+	"line"/({skip}*\(.*\)|"")		{ process_macro();  }
+}
 
-"{"					{ process_keyword();  }
+
+"{"					{ 
+						process_keyword(); 
+						if(YY_START != FUNCTION_DECLARATION) 
+							push_scope(LOCAL); 
+
+						switch(YY_START)
+						{
+							case ENUM_DECLARATION:
+								BEGIN(ENUM);
+								break;
+							case STRUCT_DECLARATION:
+								BEGIN(STRUCT);
+								break;
+							case UNION_DECLARATION:
+								BEGIN(UNION);
+								break;
+							default:
+								break;
+						}
+					}
 "<%"				{ process_keyword();  }
-"}"					{ process_keyword();  }
+"}"					{ 
+						process_keyword(); 
+						pop_scope(); 
+
+						if(YY_START == ENUM ||
+							YY_START == STRUCT ||
+							YY_START == UNION)
+							BEGIN(INITIAL);
+					}
 "%>"				{ process_keyword();  }
 "["					{ process_keyword();  }
 "<:"				{ process_keyword();  }
 "]"					{ process_keyword();  }
 ":>"				{ process_keyword();  }
 "("					{ process_keyword();  }
-")"					{ process_keyword();  }
-";"					{ process_keyword();  if(YY_START == DATATYPE) BEGIN(INITIAL); }
+")"					{ process_keyword();  if(YY_START == FUNCTION_DECLARATION) BEGIN(INITIAL); }
+";"					{ 
+						process_keyword();  
+						if(YY_START == DATATYPE) 
+							BEGIN(INITIAL); 
+					}
 ":"					{ process_keyword();  }
 "..."				{ process_keyword();  }
 ","					{ process_keyword();  }
@@ -104,9 +305,9 @@ skip                    ([\t\f\v\n\r ])
 "typedef"			{ process_keyword();  }
 "sizeof"			{ process_keyword();  }
 "while"				{ process_keyword();  }
-"enum"				{ process_keyword();  }
-"struct"			{ process_keyword();  }
-"union"				{ process_keyword();  }
+"enum"				{ process_keyword(); BEGIN(ENUM_DECLARATION); }
+"struct"			{ process_keyword(); BEGIN(STRUCT_DECLARATION); }
+"union"				{ process_keyword(); BEGIN(UNION_DECLARATION); }
 
 "?"					{ process_operator(); }
 "."					{ process_operator(); }
@@ -120,7 +321,11 @@ skip                    ([\t\f\v\n\r ])
 "|"					{ process_operator(); }
 "~"					{ process_operator(); }
 "!"					{ process_operator(); }
-"="					{ process_operator(); }
+"="					{ 
+						process_operator(); 
+						if(YY_START == DATATYPE)
+							BEGIN(DATATYPE_ASSIGN);
+					}
 "<"					{ process_operator(); }
 ">"					{ process_operator(); }
 "+="				{ process_operator(); }
@@ -152,14 +357,14 @@ skip                    ([\t\f\v\n\r ])
 "unsigned"			{ process_modifier(); }
 "volatile"			{ process_modifier(); }
 
-"float"{skip}*\**	{ process_datatype(); BEGIN(DATATYPE); }
-"double"{skip}*\**	{ process_datatype(); BEGIN(DATATYPE); }
-"char"{skip}*\**	{ process_datatype(); BEGIN(DATATYPE); }
-"int"{skip}*\**		{ process_datatype(); BEGIN(DATATYPE); }
-"long"{skip}*\**	{ process_datatype(); BEGIN(DATATYPE); }
-"short"{skip}*\**	{ process_datatype(); BEGIN(DATATYPE); }
-"void"{skip}*\**	{ process_datatype(); BEGIN(DATATYPE); }
-
+"float"				{ process_datatype(); BEGIN(DATATYPE); }
+"double"			{ process_datatype(); BEGIN(DATATYPE); }
+"char"				{ process_datatype(); BEGIN(DATATYPE); }
+"int"				{ process_datatype(); BEGIN(DATATYPE); }
+"long"				{ process_datatype(); BEGIN(DATATYPE); }
+"short"				{ process_datatype(); BEGIN(DATATYPE); }
+"void"				{ process_datatype(); BEGIN(DATATYPE); }
+		
 {id_letters}/{skip}*\(.*\)				{ process_function();   } 
 {id_letters}							{ process_identifier(); } 
 
@@ -181,11 +386,12 @@ skip                    ([\t\f\v\n\r ])
 %%
 
 int main(int argc, char *argv[])
-{
-	init_hashtable(&symbol_table);
+{	
+	scope_stack_index = -1;
+	push_scope(GLOBAL);
 	yylex();
 	printf("# Line: %d\n",yylineno);
-
+	pop_scope();
 	return 0;
 }
 
@@ -212,69 +418,106 @@ static void skip_comment()
 
 static int process_keyword() 
 {
-	printf("#%d\tKeyword:\t%s\n",yylineno,yytext);
+	printf("#%d\t%-15s: %s\n",yylineno, "Keyword", yytext);
 
 	return 1;
 }
 
 static int process_comment()
 {
-	printf("#%d\tComment:\t%s\n",yylineno, yytext);
+	printf("#%d\t%-15s: %s\n",yylineno, "Comment", yytext);
 
 	return 1;
 }
 
 static int process_operator() 
 {
-	printf("#%d\tOperator:\t%s\n",yylineno,yytext);
+	printf("#%d\t%-15s: %s\n",yylineno, "Operator", yytext);
 
 	return 1;
 }
 
 static int process_modifier() 
 {
-	printf("#%d\tModifier:\t%s\n",yylineno,yytext);
+	printf("#%d\t%-15s: %s\n",yylineno, "Modifier", yytext);
 
 	return 1;
 }
 
 static int process_datatype() 
 {
-	printf("#%d\tDataType:\t%s\n",yylineno,yytext);
+	printf("#%d\t%-15s: %s\n",yylineno, "Datatype", yytext);
 
 	return 1;
 }
 
 static int process_literal() 
 {
-	printf("#%d\tLiteral:\t%s\n",yylineno,yytext);
+	printf("#%d\t%-15s: %s\n",yylineno, "Literal", yytext);
 
 	return 1;
 }
 
 static int process_constant()
 {
-	printf("#%d\tConstant:\t%s\n",yylineno,yytext);
+	printf("#%d\t%-15s: %s\n",yylineno, "Constant", yytext);
 
 	return 1;
 }
 
 static int process_function()
 {
-	printf("#%d\tFunction:\t%s\n",yylineno,yytext);
+	switch(YY_START)
+	{
+		case DATATYPE:
+			push_scope(LOCAL);
+			BEGIN(FUNCTION_DECLARATION);
+		default:
+			printf("#%d\t%-15s: %s\n",yylineno, "Function", yytext);
+			break;
+	}
 
 	return 1;
 }
 
 static int process_identifier() 
 {
+	scope_mode_t mode;
 	switch(YY_START)
 	{
-		case DATATYPE:
-			printf("#%d\tVariable:\t%s\n",yylineno,yytext);
+		case MACRO:
+			printf("#%d\t%-15s: %s\n",yylineno, 
+				"MacroSymbol", yytext);
 			break;
+		case FUNCTION_DECLARATION:
+		case DATATYPE:
+			mode = get_current_scope();
+			printf("#%d\t%-15s: (%-10s)::%s\n",yylineno, 
+				"Variable", scope_str[mode], yytext);
+			put_symbol(yytext);
+			break;
+		case ENUM:
+			printf("#%d\t%-15s: %s\n",yylineno, 
+				"Constant", yytext);
+			break;
+		case ENUM_DECLARATION:
+			printf("#%d\t%-15s: %s\n",yylineno, 
+				"Enum", yytext);
+			break;
+		case STRUCT_DECLARATION:
+			printf("#%d\t%-15s: %s\n",yylineno, 
+				"Struct", yytext);
+			break;
+		case UNION_DECLARATION:
+			printf("#%d\t%-15s: %s\n",yylineno, 
+				"Union", yytext);
+			break;
+		case DATATYPE_ASSIGN:
+			BEGIN(DATATYPE);
 		default:
-			printf("#%d\tIdentifier:\t%s\n",yylineno,yytext);
+			mode = find_symbol(yytext);
+			printf("#%d\t%-15s: (%-10s)::%s\n",yylineno, 
+				"Identifier", scope_str[mode], yytext);
 			break;
 	}
 
@@ -283,25 +526,141 @@ static int process_identifier()
 
 static int process_macro()
 {
-	printf("#%d\tMacro:\t%s\n",yylineno,yytext);
+	printf("#%d\t%-15s: %s\n",yylineno, "Macro", yytext);
 
 	return 1;
 }
 
-static int process_struct()
+static void push_scope(scope_mode_t mode)
 {
+	++scope_stack_index;
 
-	return 1;
+	scope *s = malloc(sizeof(scope));
+	s->mode = mode;
+	init_hashtable(&s->symbol_table);
+
+	scope_stack[scope_stack_index] = s;
 }
 
-static int process_enum()
+static void pop_scope()
 {
+	scope *s = scope_stack[scope_stack_index];
+	clear_hashtable(&s->symbol_table);
+	free(scope_stack[scope_stack_index]);
+	scope_stack[scope_stack_index] = NULL;
 
-	return 1;
+	--scope_stack_index;
 }
 
-static int process_union()
+static scope_mode_t find_symbol(const char *symbol)
 {
+	int i;
+	for(i = scope_stack_index; i >= 0; i--)
+	{
+		if(find(&scope_stack[i]->symbol_table, symbol, strlen(symbol), 0))
+		{
+			return scope_stack[i]->mode;
+		}
+	}
+	return UNRESOLVED;
+}
 
-	return 1;
+static void put_symbol(const char *symbol)
+{
+	insert(&scope_stack[scope_stack_index]->symbol_table,
+		symbol, strlen(symbol));
+}
+
+static scope_mode_t get_current_scope()
+{
+	return (scope_stack_index < 0) ? 
+		UNRESOLVED : scope_stack[scope_stack_index]->mode;
+}
+
+int hash(const char *s, size_t len)
+{
+	unsigned long hash = 5381;
+	int c;
+	
+	for(int i = 0; i < len; i++)
+	{
+		c = s[i];
+		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+	}
+	
+	return hash % NUM_SLOTS;
+}
+
+/*
+	Return 1 if found
+	type: 
+		0: no insert when fail
+		1: insert when fail	
+*/
+int find(hashtable *dst, const char *s, size_t len, int type)
+{
+	int key = hash(s, len);
+
+	node *cur = dst->slots[key];
+	while(cur != NULL)
+	{
+		if(strcmp(cur->value, s) == 0)
+			return 1;
+		cur = cur->next;
+	}
+	return 0;
+}
+
+void insert(hashtable *dst, const char *s, size_t len)
+{
+	int key = hash(s, len);
+	node *cur = dst->slots[key];
+	if(cur == NULL)
+	{
+		cur = malloc(sizeof(node));
+		cur->value = strdup(s);
+		cur->next = NULL;
+		dst->slots[key] = cur;
+		dst->count++;
+	}
+	else
+	{
+		while(cur->next != NULL)
+			cur = cur->next;
+		cur->next = malloc(sizeof(node));
+		cur->next->value = strdup(s);
+		cur->next->next = NULL;  
+		dst->count++;
+	}
+
+}
+
+int init_hashtable(hashtable *src)
+{
+	memset(src->slots, 0, sizeof(src->slots));
+	src->count = 0;
+}
+
+void clear_hashtable(hashtable *table_src)
+{
+	int i;
+	for(i = 0; i < NUM_SLOTS; i++)
+	{
+		if(table_src->slots[i] != NULL)
+			clear_node(table_src->slots[i]);
+	}
+}
+
+void clear_node(node *node)
+{
+	if(node->next != NULL)
+		clear_node(node->next);
+	free(node);
+}
+
+void print_node(node *n)
+{
+	printf("%s\n",n->value);
+	if(n->next != NULL)
+		print_node(n->next);
 }

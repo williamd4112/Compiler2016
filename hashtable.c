@@ -72,6 +72,23 @@ int init_hashtable(hashtable *src)
 	src->count = 0;
 }
 
+void clear_hashtable(hashtable *table_src)
+{
+	int i;
+	for(i = 0; i < NUM_SLOTS; i++)
+	{
+		if(table_src->slots[i] != NULL)
+			clear_node(table_src->slots[i]);
+	}
+}
+
+void clear_node(node *node)
+{
+	if(node->next != NULL)
+		clear_node(node->next);
+	free(node);
+}
+
 void print_node(node *n)
 {
 	printf("%s\n",n->value);
