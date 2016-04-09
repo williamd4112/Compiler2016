@@ -42,6 +42,15 @@ struct
     double j;
 };
 
+static int swap(int *a, int *b)
+{
+	int tmp = *a;
+	*a = *b;
+	*b = tmp;
+
+	return (tmp);
+}
+
 // main function
 
 int 
@@ -56,7 +65,9 @@ main
     volatile float f = 5 / 1;
 
     register int kk = n = x = w = y = z = MAXN;
-
+	
+    n = (x > y) ? x : y;
+    x = func(x);
     for (n = 0; n <= num, n <= argc; ++n)
     {
         w = n + 1;
@@ -69,6 +80,26 @@ main
         printf("y=%d\n", y);
         printf("z=%d\n", z);
     }
+
+	switch(MAXN)
+	{
+		case (10):
+			break;
+		case 100:
+			printf("kerker\n");
+			break;
+		default:
+			break;
+	}
+
+	do {
+		asm("mov $esp, $edx");
+	}while(w < 1, y < 2 && x > 2);
+
+Retry:
+	if(w)
+		goto Retry;
+
     return 0;
 }
 

@@ -1,0 +1,217 @@
+#1	Comment        : /* Testcase2 */
+#3	Comment        : /* C subset:
+#4	Comment        :  * Variable declaration/initialization
+#5	Comment        :  * Int, double, char
+#6	Comment        :  * Simple statement
+#7	Comment        :  * ifelse/for loop
+#8	Comment        :  * function
+#9	Comment        :  * Comment
+#10	Comment        :  */
+#11	Keyword        : #
+#11	Macro          : include
+#11	Literal        : <stdio.h>
+#13	Comment        : // swap function
+#14	Datatype       : int
+#14	Function       : swap
+#14	Keyword        : (
+#14	Datatype       : int
+#14	Variable       : (_local    )::x
+#14	Keyword        : ,
+#14	Datatype       : int
+#14	Variable       : (_local    )::y
+#14	Keyword        : )
+#15	Keyword        : {
+#16	Datatype       : int
+#16	Variable       : (_local    )::tmp
+#16	Keyword        : ;
+#17	Identifier     : (_local    )::tmp
+#17	Operator       : =
+#17	Identifier     : (_local    )::x
+#17	Keyword        : ;
+#18	Identifier     : (_local    )::x
+#18	Operator       : =
+#18	Identifier     : (_local    )::y
+#18	Keyword        : ;
+#19	Identifier     : (_local    )::y
+#19	Operator       : =
+#19	Identifier     : (_local    )::tmp
+#19	Keyword        : ;
+#20	Function       : printf
+#20	Keyword        : (
+#20	Literal        : "swap: x=%d, y=%d\n"
+#20	Keyword        : ,
+#20	Identifier     : (_local    )::x
+#20	Keyword        : ,
+#20	Identifier     : (_local    )::y
+#20	Keyword        : )
+#20	Keyword        : ;
+#21	Keyword        : return
+#21	Identifier     : (_local    )::y
+#21	Operator       : -
+#21	Literal        : 10
+#21	Keyword        : ;
+#22	Keyword        : }
+#24	Comment        : // main function
+#25	Datatype       : int
+#25	Function       : main
+#25	Keyword        : (
+#25	Datatype       : void
+#25	Keyword        : )
+#26	Keyword        : {
+#27	Datatype       : int
+#27	Variable       : (_local    )::n
+#27	Keyword        : ,
+#27	Variable       : (_local    )::w
+#27	Keyword        : ,
+#27	Variable       : (_local    )::x
+#27	Keyword        : ,
+#27	Variable       : (_local    )::y
+#27	Keyword        : ,
+#27	Variable       : (_local    )::z
+#27	Keyword        : ;
+#28	Datatype       : int
+#28	Variable       : (_local    )::num
+#28	Operator       : =
+#28	Literal        : 10
+#28	Keyword        : ;
+#29	Datatype       : double
+#29	Variable       : (_local    )::num1
+#29	Operator       : =
+#29	Literal        : 0
+#29	Keyword        : ;
+#30	Datatype       : char
+#30	Variable       : (_local    )::character
+#30	Operator       : =
+#30	Literal        : 'W'
+#30	Keyword        : ;
+#32	Keyword        : for
+#32	Keyword        : (
+#32	Identifier     : (_local    )::n
+#32	Operator       : =
+#32	Literal        : 0
+#32	Keyword        : ;
+#32	Identifier     : (_local    )::n
+#32	Operator       : <=
+#32	Identifier     : (_local    )::num
+#32	Keyword        : ;
+#32	Operator       : ++
+#32	Identifier     : (_local    )::n
+#32	Keyword        : )
+#33	Keyword        : {
+#34	Identifier     : (_local    )::w
+#34	Operator       : =
+#34	Identifier     : (_local    )::n
+#34	Operator       : +
+#34	Literal        : 1
+#34	Keyword        : ;
+#35	Identifier     : (_local    )::x
+#35	Operator       : =
+#35	Identifier     : (_local    )::n
+#35	Operator       : -
+#35	Literal        : 2
+#35	Keyword        : ;
+#36	Keyword        : if
+#36	Keyword        : (
+#36	Identifier     : (_local    )::x
+#36	Operator       : ==
+#36	Literal        : 0
+#36	Keyword        : )
+#37	Keyword        : {
+#38	Datatype       : int
+#38	Variable       : (_local    )::a
+#38	Operator       : =
+#38	Literal        : 0
+#38	Keyword        : ;
+#39	Identifier     : (_local    )::a
+#39	Operator       : =
+#39	Keyword        : (
+#39	Identifier     : (_local    )::w
+#39	Operator       : +
+#39	Literal        : 2
+#39	Keyword        : )
+#39	Operator       : *
+#39	Literal        : 2
+#39	Operator       : -
+#39	Literal        : 1
+#39	Keyword        : ;
+#40	Identifier     : (_local    )::x
+#40	Operator       : =
+#40	Function       : swap
+#40	Keyword        : (
+#40	Literal        : 10
+#40	Keyword        : ,
+#40	Identifier     : (_local    )::a
+#40	Keyword        : )
+#40	Keyword        : ;
+#41	Keyword        : }
+#42	Keyword        : else
+#43	Keyword        : {
+#44	Identifier     : (_local    )::x
+#44	Operator       : =
+#44	Identifier     : (_local    )::n
+#44	Operator       : %
+#44	Literal        : 2
+#44	Keyword        : ;
+#45	Keyword        : }
+#46	Identifier     : (_local    )::y
+#46	Operator       : =
+#46	Identifier     : (_local    )::n
+#46	Operator       : *
+#46	Literal        : 3
+#46	Keyword        : ;
+#47	Identifier     : (_local    )::z
+#47	Operator       : =
+#47	Identifier     : (_local    )::n
+#47	Operator       : /
+#47	Literal        : 4
+#47	Keyword        : ;
+#48	Function       : printf
+#48	Keyword        : (
+#48	Literal        : "Result:\n"
+#48	Keyword        : )
+#48	Keyword        : ;
+#49	Function       : printf
+#49	Keyword        : (
+#49	Literal        : "w=%d\n"
+#49	Keyword        : ,
+#49	Identifier     : (_local    )::w
+#49	Keyword        : )
+#49	Keyword        : ;
+#50	Function       : printf
+#50	Keyword        : (
+#50	Literal        : "x=%d\n"
+#50	Keyword        : ,
+#50	Identifier     : (_local    )::x
+#50	Keyword        : )
+#50	Keyword        : ;
+#51	Function       : printf
+#51	Keyword        : (
+#51	Literal        : "y=%d\n"
+#51	Keyword        : ,
+#51	Identifier     : (_local    )::y
+#51	Keyword        : )
+#51	Keyword        : ;
+#52	Function       : printf
+#52	Keyword        : (
+#52	Literal        : "z=%d\n"
+#52	Keyword        : ,
+#52	Identifier     : (_local    )::z
+#52	Keyword        : )
+#52	Keyword        : ;
+#53	Function       : printf
+#53	Keyword        : (
+#53	Literal        : "num1=%f\n"
+#53	Keyword        : ,
+#53	Identifier     : (_local    )::num1
+#53	Keyword        : )
+#53	Keyword        : ;
+#54	Function       : printf
+#54	Keyword        : (
+#54	Literal        : "\n"
+#54	Keyword        : )
+#54	Keyword        : ;
+#55	Keyword        : }
+#56	Keyword        : return
+#56	Literal        : 0
+#56	Keyword        : ;
+#57	Keyword        : }

@@ -2,7 +2,7 @@ CC=gcc
 EXECUTABLE=hw1
 SRC=lex.yy.c
 LEX=flex
-LEXER=hw1.l
+LEXER=102062171_hw1.l
 GCC_OPTION=-o
 
 all:

@@ -1,0 +1,347 @@
+#1	Comment        : /* Testcase1 */
+#3	Comment        : /* C subset:
+#4	Comment        :  * Variable declaration/initialization
+#5	Comment        :  * Int
+#6	Comment        :  * Simple statement
+#7	Comment        :  * for loop \*\/
+#8	Comment        :  * Comment /*
+#9	Comment        :  */
+#10	Keyword        : #
+#10	Macro          : include
+#10	Literal        : <stdio.h>
+#11	Keyword        : #
+#11	Macro          : include
+#11	Literal        : "tyler.h"
+#13	Keyword        : #
+#13	Macro          : ifdef
+#13	MacroSymbol    : _DEBUG
+#14	Keyword        : #
+#14	Macro          : define
+#14	MacroSymbol    : PI
+#14	Literal        : 3.14
+#15	Keyword        : #
+#15	Macro          : else
+#16	Keyword        : #
+#16	Macro          : define
+#16	MacroSymbol    : PI
+#16	MacroSymbol    : M_PI
+#17	Keyword        : #
+#17	Macro          : endif
+#19	Keyword        : struct
+#19	Struct         : node_t
+#20	Keyword        : {
+#21	Datatype       : int
+#21	Variable       : (_local    )::id
+#21	Keyword        : ;
+#22	Datatype       : char
+#22	Operator       : *
+#22	Variable       : (_local    )::name
+#22	Keyword        : ;
+#23	Keyword        : }
+#23	Keyword        : ;
+#25	Keyword        : enum
+#25	Enum           : error_t
+#26	Keyword        : {
+#27	Constant       : KILL
+#27	Keyword        : ,
+#28	Constant       : TERMINATE
+#29	Keyword        : }
+#29	Keyword        : ;
+#31	Keyword        : union
+#31	Union          : data_t
+#32	Keyword        : {
+#33	Datatype       : int
+#33	Variable       : (_local    )::digit
+#33	Keyword        : ;
+#34	Datatype       : char
+#34	Operator       : *
+#34	Variable       : (_local    )::str
+#34	Keyword        : ;
+#35	Keyword        : }
+#35	Keyword        : ;
+#37	Modifier       : const
+#37	Modifier       : static
+#37	Datatype       : int
+#37	Variable       : (_global   )::MAXN
+#37	Operator       : =
+#37	Literal        : 1024
+#37	Keyword        : ;
+#39	Keyword        : struct
+#40	Keyword        : {
+#41	Datatype       : int
+#41	Variable       : (_local    )::i
+#41	Keyword        : ;
+#42	Datatype       : double
+#42	Variable       : (_local    )::j
+#42	Keyword        : ;
+#43	Keyword        : }
+#43	Keyword        : ;
+#45	Modifier       : static
+#45	Datatype       : int
+#45	Function       : swap
+#45	Keyword        : (
+#45	Datatype       : int
+#45	Operator       : *
+#45	Variable       : (_local    )::a
+#45	Keyword        : ,
+#45	Datatype       : int
+#45	Operator       : *
+#45	Variable       : (_local    )::b
+#45	Keyword        : )
+#46	Keyword        : {
+#47	Datatype       : int
+#47	Variable       : (_local    )::tmp
+#47	Operator       : =
+#47	Operator       : *
+#47	Identifier     : (_local    )::a
+#47	Keyword        : ;
+#48	Operator       : *
+#48	Identifier     : (_local    )::a
+#48	Operator       : =
+#48	Operator       : *
+#48	Identifier     : (_local    )::b
+#48	Keyword        : ;
+#49	Operator       : *
+#49	Identifier     : (_local    )::b
+#49	Operator       : =
+#49	Identifier     : (_local    )::tmp
+#49	Keyword        : ;
+#51	Keyword        : return
+#51	Keyword        : (
+#51	Identifier     : (_local    )::tmp
+#51	Keyword        : )
+#51	Keyword        : ;
+#52	Keyword        : }
+#54	Comment        : // main function
+#56	Datatype       : int
+#57	Operator       : *
+#57	Operator       : *
+#58	Function       : main
+#59	Keyword        : (
+#59	Datatype       : int
+#59	Variable       : (_local    )::argc
+#59	Keyword        : ,
+#59	Datatype       : char
+#59	Operator       : *
+#59	Variable       : (_local    )::argv
+#59	Keyword        : [
+#59	Keyword        : ]
+#59	Keyword        : )
+#60	Keyword        : {
+#61	Datatype       : int
+#61	Variable       : (_local    )::n
+#61	Keyword        : ,
+#61	Variable       : (_local    )::w
+#61	Keyword        : ,
+#61	Variable       : (_local    )::x
+#61	Keyword        : ,
+#61	Variable       : (_local    )::y
+#61	Keyword        : ,
+#61	Variable       : (_local    )::z
+#61	Keyword        : ;
+#62	Datatype       : int
+#62	Variable       : (_local    )::num
+#62	Operator       : =
+#62	Literal        : 1000
+#62	Keyword        : ;
+#63	Datatype       : int
+#63	Variable       : (_local    )::num_max
+#63	Operator       : =
+#63	Identifier     : (_global   )::MAXN
+#63	Keyword        : ;
+#65	Modifier       : volatile
+#65	Datatype       : float
+#65	Variable       : (_local    )::f
+#65	Operator       : =
+#65	Literal        : 5
+#65	Operator       : /
+#65	Literal        : 1
+#65	Keyword        : ;
+#67	Modifier       : register
+#67	Datatype       : int
+#67	Variable       : (_local    )::kk
+#67	Operator       : =
+#67	Identifier     : (_local    )::n
+#67	Operator       : =
+#67	Identifier     : (_local    )::x
+#67	Operator       : =
+#67	Identifier     : (_local    )::w
+#67	Operator       : =
+#67	Identifier     : (_local    )::y
+#67	Operator       : =
+#67	Identifier     : (_local    )::z
+#67	Operator       : =
+#67	Identifier     : (_global   )::MAXN
+#67	Keyword        : ;
+#69	Identifier     : (_local    )::n
+#69	Operator       : =
+#69	Keyword        : (
+#69	Identifier     : (_local    )::x
+#69	Operator       : >
+#69	Identifier     : (_local    )::y
+#69	Keyword        : )
+#69	Operator       : ?
+#69	Identifier     : (_local    )::x
+#69	Keyword        : :
+#69	Identifier     : (_local    )::y
+#69	Keyword        : ;
+#70	Identifier     : (_local    )::x
+#70	Operator       : =
+#70	Function       : func
+#70	Keyword        : (
+#70	Identifier     : (_local    )::x
+#70	Keyword        : )
+#70	Keyword        : ;
+#71	Keyword        : for
+#71	Keyword        : (
+#71	Identifier     : (_local    )::n
+#71	Operator       : =
+#71	Literal        : 0
+#71	Keyword        : ;
+#71	Identifier     : (_local    )::n
+#71	Operator       : <=
+#71	Identifier     : (_local    )::num
+#71	Keyword        : ,
+#71	Identifier     : (_local    )::n
+#71	Operator       : <=
+#71	Identifier     : (_local    )::argc
+#71	Keyword        : ;
+#71	Operator       : ++
+#71	Identifier     : (_local    )::n
+#71	Keyword        : )
+#72	Keyword        : {
+#73	Identifier     : (_local    )::w
+#73	Operator       : =
+#73	Identifier     : (_local    )::n
+#73	Operator       : +
+#73	Literal        : 1
+#73	Keyword        : ;
+#74	Identifier     : (_local    )::x
+#74	Operator       : =
+#74	Identifier     : (_local    )::n
+#74	Operator       : -
+#74	Literal        : 2
+#74	Keyword        : ;
+#75	Identifier     : (_local    )::y
+#75	Operator       : =
+#75	Identifier     : (_local    )::n
+#75	Operator       : *
+#75	Literal        : 3
+#75	Keyword        : ;
+#76	Identifier     : (_local    )::z
+#76	Operator       : =
+#76	Identifier     : (_local    )::n
+#76	Operator       : /
+#76	Literal        : 4
+#76	Keyword        : ;
+#77	Function       : printf
+#77	Keyword        : (
+#77	Literal        : "Result:\n"
+#77	Keyword        : )
+#77	Keyword        : ;
+#78	Function       : printf
+#78	Keyword        : (
+#78	Literal        : "w=%d\n"
+#78	Keyword        : ,
+#78	Identifier     : (_local    )::w
+#78	Keyword        : )
+#78	Keyword        : ;
+#79	Function       : printf
+#79	Keyword        : (
+#79	Literal        : "x=%d\n"
+#79	Keyword        : ,
+#79	Identifier     : (_local    )::x
+#79	Keyword        : )
+#79	Keyword        : ;
+#80	Function       : printf
+#80	Keyword        : (
+#80	Literal        : "y=%d\n"
+#80	Keyword        : ,
+#80	Identifier     : (_local    )::y
+#80	Keyword        : )
+#80	Keyword        : ;
+#81	Function       : printf
+#81	Keyword        : (
+#81	Literal        : "z=%d\n"
+#81	Keyword        : ,
+#81	Identifier     : (_local    )::z
+#81	Keyword        : )
+#81	Keyword        : ;
+#82	Keyword        : }
+#84	Keyword        : switch
+#84	Keyword        : (
+#84	Identifier     : (_global   )::MAXN
+#84	Keyword        : )
+#85	Keyword        : {
+#86	Keyword        : case
+#86	Keyword        : (
+#86	Literal        : 10
+#86	Keyword        : )
+#86	Keyword        : :
+#87	Keyword        : break
+#87	Keyword        : ;
+#88	Keyword        : case
+#88	Literal        : 100
+#88	Keyword        : :
+#89	Function       : printf
+#89	Keyword        : (
+#89	Literal        : "kerker\n"
+#89	Keyword        : )
+#89	Keyword        : ;
+#90	Keyword        : break
+#90	Keyword        : ;
+#91	Keyword        : default
+#91	Keyword        : :
+#92	Keyword        : break
+#92	Keyword        : ;
+#93	Keyword        : }
+#95	Keyword        : do
+#95	Keyword        : {
+#96	Function       : asm
+#96	Keyword        : (
+#96	Literal        : "mov $esp, $edx"
+#96	Keyword        : )
+#96	Keyword        : ;
+#97	Keyword        : }
+#97	Keyword        : while
+#97	Keyword        : (
+#97	Identifier     : (_local    )::w
+#97	Operator       : <
+#97	Literal        : 1
+#97	Keyword        : ,
+#97	Identifier     : (_local    )::y
+#97	Operator       : <
+#97	Literal        : 2
+#97	Operator       : &&
+#97	Identifier     : (_local    )::x
+#97	Operator       : >
+#97	Literal        : 2
+#97	Keyword        : )
+#97	Keyword        : ;
+#99	Identifier     : (          )::Retry
+#99	Keyword        : :
+#100	Keyword        : if
+#100	Keyword        : (
+#100	Identifier     : (_local    )::w
+#100	Keyword        : )
+#101	Keyword        : goto
+#101	Identifier     : (          )::Retry
+#101	Keyword        : ;
+#103	Keyword        : return
+#103	Literal        : 0
+#103	Keyword        : ;
+#104	Keyword        : }
+#106	Keyword        : #
+#106	Macro          : error
+#106	Keyword        : ;
+#108	Keyword        : #
+#108	Macro          : pragma
+#108	Keyword        : (
+#108	Literal        : "lib"
+#108	Keyword        : ,
+#108	Literal        : "stdlib"
+#108	Keyword        : )
+#108	Keyword        : ;
+#109	Keyword        : #
+#109	Macro          : pragma
+#109	Keyword        : ;

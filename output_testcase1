@@ -1,0 +1,110 @@
+#1	Comment        : /* Testcase1 */
+#3	Comment        : /* C subset:
+#4	Comment        :  * Variable declaration/initialization
+#5	Comment        :  * Int
+#6	Comment        :  * Simple statement
+#7	Comment        :  * for loop
+#8	Comment        :  * Comment /*
+#9	Comment        :  */
+#10	Keyword        : #
+#10	Macro          : include
+#10	Literal        : <stdio.h>
+#12	Comment        : // main function
+#13	Datatype       : int
+#13	Function       : main
+#13	Keyword        : (
+#13	Datatype       : void
+#13	Keyword        : )
+#14	Keyword        : {
+#15	Datatype       : int
+#15	Variable       : (_local    )::n
+#15	Keyword        : ,
+#15	Variable       : (_local    )::w
+#15	Keyword        : ,
+#15	Variable       : (_local    )::x
+#15	Keyword        : ,
+#15	Variable       : (_local    )::y
+#15	Keyword        : ,
+#15	Variable       : (_local    )::z
+#15	Keyword        : ;
+#16	Datatype       : int
+#16	Variable       : (_local    )::num
+#16	Operator       : =
+#16	Literal        : 1000
+#16	Keyword        : ;
+#18	Keyword        : for
+#18	Keyword        : (
+#18	Identifier     : (_local    )::n
+#18	Operator       : =
+#18	Literal        : 0
+#18	Keyword        : ;
+#18	Identifier     : (_local    )::n
+#18	Operator       : <=
+#18	Identifier     : (_local    )::num
+#18	Keyword        : ;
+#18	Operator       : ++
+#18	Identifier     : (_local    )::n
+#18	Keyword        : )
+#19	Keyword        : {
+#20	Identifier     : (_local    )::w
+#20	Operator       : =
+#20	Identifier     : (_local    )::n
+#20	Operator       : +
+#20	Literal        : 1
+#20	Keyword        : ;
+#21	Identifier     : (_local    )::x
+#21	Operator       : =
+#21	Identifier     : (_local    )::n
+#21	Operator       : -
+#21	Literal        : 2
+#21	Keyword        : ;
+#22	Identifier     : (_local    )::y
+#22	Operator       : =
+#22	Identifier     : (_local    )::n
+#22	Operator       : *
+#22	Literal        : 3
+#22	Keyword        : ;
+#23	Identifier     : (_local    )::z
+#23	Operator       : =
+#23	Identifier     : (_local    )::n
+#23	Operator       : /
+#23	Literal        : 4
+#23	Keyword        : ;
+#24	Function       : printf
+#24	Keyword        : (
+#24	Literal        : "Result:\n"
+#24	Keyword        : )
+#24	Keyword        : ;
+#25	Function       : printf
+#25	Keyword        : (
+#25	Literal        : "w=%d\n"
+#25	Keyword        : ,
+#25	Identifier     : (_local    )::w
+#25	Keyword        : )
+#25	Keyword        : ;
+#26	Function       : printf
+#26	Keyword        : (
+#26	Literal        : "x=%d\n"
+#26	Keyword        : ,
+#26	Identifier     : (_local    )::x
+#26	Keyword        : )
+#26	Keyword        : ;
+#27	Function       : printf
+#27	Keyword        : (
+#27	Literal        : "y=%d\n"
+#27	Keyword        : ,
+#27	Identifier     : (_local    )::y
+#27	Keyword        : )
+#27	Keyword        : ;
+#28	Function       : printf
+#28	Keyword        : (
+#28	Literal        : "z=%d\n"
+#28	Keyword        : ,
+#28	Identifier     : (_local    )::z
+#28	Keyword        : )
+#28	Keyword        : ;
+#29	Keyword        : }
+#30	Keyword        : return
+#30	Literal        : 0
+#30	Keyword        : ;
+#31	Keyword        : }
